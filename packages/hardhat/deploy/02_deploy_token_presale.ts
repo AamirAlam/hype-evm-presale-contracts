@@ -35,7 +35,10 @@ const deployTokenPresale: DeployFunction = async function (hre: HardhatRuntimeEn
   const currentTimestamp = Math.floor(Date.now() / 1000);
 
   // Example presale parameters
+  const tokenSymbol = "HTEST"; // Token symbol
   const tokenPrice = hre.ethers.parseEther("0.0001"); // 0.0001 ETH per token
+  const valuation = hre.ethers.parseEther("10000000"); // $10M valuation (scaled by 1e18)
+  const totalAllocation = hre.ethers.parseEther("1000000"); // 1 million tokens (scaled by 1e18)
   const startTime = currentTimestamp + 300; // Starts in 5 minutes
   const endTime = startTime + 86400; // Ends in 24 hours
   const minDepositAmount = hre.ethers.parseEther("0.01"); // 0.01 ETH
@@ -44,21 +47,28 @@ const deployTokenPresale: DeployFunction = async function (hre: HardhatRuntimeEn
   const tier1WhitelistEndTime = startTime + 3600; // Tier 1 ends in 1 hour after start
   const tier2WhitelistEndTime = startTime + 7200; // Tier 2 ends in 2 hours after start
 
-  // Create a presale
-  const tx = await tokenPresaleContract.createPresale(
-    htestAddress,
-    tokenPrice,
-    startTime,
-    endTime,
-    minDepositAmount,
-    maxDepositAmount,
-    totalRaiseGoal,
-    tier1WhitelistEndTime,
-    tier2WhitelistEndTime,
-  );
+  try {
+    // Create a presale
+    const tx = await tokenPresaleContract.createPresale(
+      htestAddress,
+      tokenSymbol,
+      tokenPrice,
+      valuation,
+      totalAllocation,
+      startTime,
+      endTime,
+      minDepositAmount,
+      maxDepositAmount,
+      totalRaiseGoal,
+      tier1WhitelistEndTime,
+      tier2WhitelistEndTime,
+    );
 
-  await tx.wait();
-  console.log("✅ Example presale created with ID: 1");
+    await tx.wait();
+    console.log("✅ Example presale created with ID: 1");
+  } catch (error) {
+    console.error("Error creating presale:", error);
+  }
 
   // Mint tokens to the TokenPresale contract for distribution
   const tokensToMint = hre.ethers.parseEther("100000"); // 100,000 tokens

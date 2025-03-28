@@ -52,8 +52,8 @@ const config: HardhatUserConfig = {
     // If the network you are looking for is not here you can add new network settings
     hardhat: {
       forking: {
-        url: `https://eth-mainnet.alchemyapi.io/v2/${providerApiKey}`,
-        enabled: process.env.MAINNET_FORKING_ENABLED === "true",
+        url: "https://rpc.hyperliquid-testnet.xyz/evm",
+        enabled: true,
       },
     },
     mainnet: {
@@ -62,6 +62,16 @@ const config: HardhatUserConfig = {
     },
     sepolia: {
       url: `https://eth-sepolia.g.alchemy.com/v2/${providerApiKey}`,
+      accounts: [deployerPrivateKey],
+    },
+    "hype-mainnet": {
+      url: "https://rpc.hyperliquid.xyz/evm",
+      chainId: 999,
+      accounts: [deployerPrivateKey],
+    },
+    "hype-testnet": {
+      url: "https://rpc.hyperliquid-testnet.xyz/evm",
+      chainId: 998,
       accounts: [deployerPrivateKey],
     },
     arbitrum: {

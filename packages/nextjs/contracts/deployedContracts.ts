@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   31337: {
     HTEST: {
-      address: "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+      address: "0x9155497EAE31D432C0b13dBCc0615a37f55a2c87",
       abi: [
         {
           inputs: [],
@@ -431,7 +431,7 @@ const deployedContracts = {
       },
     },
     TokenPresale: {
-      address: "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+      address: "0x46d4674578a2daBbD0CEAB0500c6c7867999db34",
       abi: [
         {
           inputs: [],
@@ -554,6 +554,12 @@ const deployedContracts = {
               internalType: "address",
               name: "tokenAddress",
               type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "string",
+              name: "tokenSymbol",
+              type: "string",
             },
             {
               indexed: false,
@@ -718,8 +724,23 @@ const deployedContracts = {
               type: "address",
             },
             {
+              internalType: "string",
+              name: "_tokenSymbol",
+              type: "string",
+            },
+            {
               internalType: "uint256",
               name: "_tokenPrice",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "_valuation",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "_totalAllocation",
               type: "uint256",
             },
             {
@@ -876,8 +897,23 @@ const deployedContracts = {
               type: "address",
             },
             {
+              internalType: "string",
+              name: "tokenSymbol",
+              type: "string",
+            },
+            {
               internalType: "uint256",
               name: "tokenPrice",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "valuation",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "totalAllocation",
               type: "uint256",
             },
             {
