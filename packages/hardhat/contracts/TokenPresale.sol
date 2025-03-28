@@ -15,16 +15,19 @@ contract TokenPresale is Ownable, ReentrancyGuard {
     struct Presale {
         uint256 presaleId;
         address tokenAddress;
-        uint256 tokenPrice; // Price in ETH per token (in wei)
+        string tokenSymbol;    // Symbol of the token being sold
+        uint256 tokenPrice;    // Price in ETH per token (in wei)
+        uint256 valuation;     // Project valuation in USD (scaled by 1e18)
+        uint256 totalAllocation; // Total token allocation for the presale
         uint256 startTime;
         uint256 endTime;
         uint256 minDepositAmount; // Minimum ETH deposit per user
         uint256 maxDepositAmount; // Maximum ETH deposit per user
-        uint256 totalRaiseGoal; // Total ETH to raise
-        uint256 totalRaised; // Total ETH raised so far
+        uint256 totalRaiseGoal;   // Total ETH to raise
+        uint256 totalRaised;      // Total ETH raised so far
         uint256 tier1WhitelistEndTime; // When tier 1 whitelist period ends
         uint256 tier2WhitelistEndTime; // When tier 2 whitelist period ends
-        bool isActive; // Whether the presale is active
+        bool isActive;            // Whether the presale is active
     }
 
     // Mapping from presale ID to Presale struct
@@ -41,7 +44,7 @@ contract TokenPresale is Ownable, ReentrancyGuard {
     uint256 public presaleCounter;
 
     // Events
-    event PresaleCreated(uint256 indexed presaleId, address tokenAddress, uint256 tokenPrice);
+    event PresaleCreated(uint256 indexed presaleId, address tokenAddress, string tokenSymbol, uint256 tokenPrice);
     event Deposit(uint256 indexed presaleId, address indexed user, uint256 amount, uint256 tokensReceived);
     event WhitelistUpdated(uint256 indexed presaleId, address indexed user, uint256 amount, uint8 tier);
     event PresaleUpdated(uint256 indexed presaleId, bool isActive);
@@ -53,7 +56,10 @@ contract TokenPresale is Ownable, ReentrancyGuard {
     /**
      * @dev Create a new presale
      * @param _tokenAddress Address of the token being sold
+     * @param _tokenSymbol Symbol of the token being sold
      * @param _tokenPrice Price of the token in ETH (wei)
+     * @param _valuation Project valuation in USD (scaled by 1e18)
+     * @param _totalAllocation Total token allocation for the presale
      * @param _startTime Start time of the presale
      * @param _endTime End time of the presale
      * @param _minDepositAmount Minimum deposit amount per user
@@ -64,7 +70,10 @@ contract TokenPresale is Ownable, ReentrancyGuard {
      */
     function createPresale(
         address _tokenAddress,
+        string memory _tokenSymbol,
         uint256 _tokenPrice,
+        uint256 _valuation,
+        uint256 _totalAllocation,
         uint256 _startTime,
         uint256 _endTime,
         uint256 _minDepositAmount,
@@ -74,7 +83,10 @@ contract TokenPresale is Ownable, ReentrancyGuard {
         uint256 _tier2WhitelistEndTime
     ) external onlyOwner {
         require(_tokenAddress != address(0), "Invalid token address");
+        require(bytes(_tokenSymbol).length > 0, "Invalid token symbol");
         require(_tokenPrice > 0, "Token price must be greater than 0");
+        require(_valuation > 0, "Valuation must be greater than 0");
+        require(_totalAllocation > 0, "Total allocation must be greater than 0");
         require(_startTime < _endTime, "Start time must be before end time");
         require(_minDepositAmount > 0, "Min deposit must be greater than 0");
         require(_maxDepositAmount >= _minDepositAmount, "Max deposit must be greater than or equal to min deposit");
@@ -89,7 +101,10 @@ contract TokenPresale is Ownable, ReentrancyGuard {
         presales[presaleId] = Presale({
             presaleId: presaleId,
             tokenAddress: _tokenAddress,
+            tokenSymbol: _tokenSymbol,
             tokenPrice: _tokenPrice,
+            valuation: _valuation,
+            totalAllocation: _totalAllocation,
             startTime: _startTime,
             endTime: _endTime,
             minDepositAmount: _minDepositAmount,
@@ -101,7 +116,7 @@ contract TokenPresale is Ownable, ReentrancyGuard {
             isActive: true
         });
 
-        emit PresaleCreated(presaleId, _tokenAddress, _tokenPrice);
+        emit PresaleCreated(presaleId, _tokenAddress, _tokenSymbol, _tokenPrice);
     }
 
     /**

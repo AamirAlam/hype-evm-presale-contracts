@@ -35,6 +35,7 @@ const config: HardhatUserConfig = {
             // https://docs.soliditylang.org/en/latest/using-the-compiler.html#optimizer-options
             runs: 200,
           },
+          viaIR: true, // Enable IR-based code generation to fix "Stack too deep" errors
         },
       },
     ],

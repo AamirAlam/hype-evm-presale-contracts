@@ -50,7 +50,10 @@ describe("TokenPresale", function () {
     // Create a presale
     await tokenPresale.createPresale(
       await htest.getAddress(),
+      "HTEST",  // Token symbol
       tokenPrice,
+      ethers.parseEther("10000000"),  // Valuation: 10 million USD (scaled by 1e18)
+      ethers.parseEther("1000000"),   // Total allocation: 1 million tokens (scaled by 1e18)
       startTime,
       endTime,
       minDepositAmount,
@@ -312,7 +315,10 @@ describe("TokenPresale", function () {
       
       await tokenPresale.createPresale(
         await htest.getAddress(),
+        "HTEST",  // Token symbol
         tokenPrice,
+        ethers.parseEther("10000000"),  // Valuation: 10 million USD (scaled by 1e18)
+        ethers.parseEther("1000000"),   // Total allocation: 1 million tokens (scaled by 1e18)
         futureStartTime,
         futureEndTime,
         minDepositAmount,
@@ -395,7 +401,10 @@ describe("TokenPresale", function () {
       
       await tokenPresale.createPresale(
         await htest.getAddress(),
+        "HTEST",  // Token symbol
         tokenPrice,
+        ethers.parseEther("10000000"),  // Valuation: 10 million USD (scaled by 1e18)
+        ethers.parseEther("1000000"),   // Total allocation: 1 million tokens (scaled by 1e18)
         newStartTime,
         newEndTime,
         minDepositAmount,
@@ -498,7 +507,10 @@ describe("TokenPresale", function () {
       
       await tokenPresale.createPresale(
         await htest.getAddress(),
+        "HTEST",  // Token symbol
         tokenPrice,
+        ethers.parseEther("10000000"),  // Valuation: 10 million USD (scaled by 1e18)
+        ethers.parseEther("1000000"),   // Total allocation: 1 million tokens (scaled by 1e18)
         newStartTime,
         newEndTime,
         minDepositAmount,
