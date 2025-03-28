@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   31337: {
     HTEST: {
-      address: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      address: "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
       abi: [
         {
           inputs: [],
@@ -430,19 +430,96 @@ const deployedContracts = {
         transferOwnership: "@openzeppelin/contracts/access/Ownable.sol",
       },
     },
-    YourContract: {
-      address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+    TokenPresale: {
+      address: "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
       abi: [
+        {
+          inputs: [],
+          stateMutability: "nonpayable",
+          type: "constructor",
+        },
         {
           inputs: [
             {
               internalType: "address",
-              name: "_owner",
+              name: "owner",
               type: "address",
             },
           ],
-          stateMutability: "nonpayable",
-          type: "constructor",
+          name: "OwnableInvalidOwner",
+          type: "error",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "account",
+              type: "address",
+            },
+          ],
+          name: "OwnableUnauthorizedAccount",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "ReentrancyGuardReentrantCall",
+          type: "error",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "presaleId",
+              type: "uint256",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "user",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "amount",
+              type: "uint256",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "tokensReceived",
+              type: "uint256",
+            },
+          ],
+          name: "Deposit",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "presaleId",
+              type: "uint256",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "recipient",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "amount",
+              type: "uint256",
+            },
+          ],
+          name: "FundsWithdrawn",
+          type: "event",
         },
         {
           anonymous: false,
@@ -450,39 +527,303 @@ const deployedContracts = {
             {
               indexed: true,
               internalType: "address",
-              name: "greetingSetter",
+              name: "previousOwner",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "newOwner",
+              type: "address",
+            },
+          ],
+          name: "OwnershipTransferred",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "presaleId",
+              type: "uint256",
+            },
+            {
+              indexed: false,
+              internalType: "address",
+              name: "tokenAddress",
               type: "address",
             },
             {
               indexed: false,
-              internalType: "string",
-              name: "newGreeting",
-              type: "string",
+              internalType: "uint256",
+              name: "tokenPrice",
+              type: "uint256",
+            },
+          ],
+          name: "PresaleCreated",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "presaleId",
+              type: "uint256",
             },
             {
               indexed: false,
               internalType: "bool",
-              name: "premium",
+              name: "isActive",
               type: "bool",
+            },
+          ],
+          name: "PresaleUpdated",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "presaleId",
+              type: "uint256",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "user",
+              type: "address",
             },
             {
               indexed: false,
               internalType: "uint256",
-              name: "value",
+              name: "amount",
               type: "uint256",
             },
           ],
-          name: "GreetingChange",
+          name: "TokensWithdrawn",
           type: "event",
         },
         {
-          inputs: [],
-          name: "greeting",
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "presaleId",
+              type: "uint256",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "user",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "amount",
+              type: "uint256",
+            },
+            {
+              indexed: false,
+              internalType: "uint8",
+              name: "tier",
+              type: "uint8",
+            },
+          ],
+          name: "WhitelistUpdated",
+          type: "event",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "_presaleId",
+              type: "uint256",
+            },
+            {
+              internalType: "address[]",
+              name: "_users",
+              type: "address[]",
+            },
+            {
+              internalType: "uint256[]",
+              name: "_amounts",
+              type: "uint256[]",
+            },
+          ],
+          name: "addToTier1Whitelist",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "_presaleId",
+              type: "uint256",
+            },
+            {
+              internalType: "address[]",
+              name: "_users",
+              type: "address[]",
+            },
+            {
+              internalType: "uint256[]",
+              name: "_amounts",
+              type: "uint256[]",
+            },
+          ],
+          name: "addToTier2Whitelist",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "_presaleId",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "_ethAmount",
+              type: "uint256",
+            },
+          ],
+          name: "calculateTokenAmount",
           outputs: [
             {
-              internalType: "string",
+              internalType: "uint256",
               name: "",
-              type: "string",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "_tokenAddress",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "_tokenPrice",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "_startTime",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "_endTime",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "_minDepositAmount",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "_maxDepositAmount",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "_totalRaiseGoal",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "_tier1WhitelistEndTime",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "_tier2WhitelistEndTime",
+              type: "uint256",
+            },
+          ],
+          name: "createPresale",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "_presaleId",
+              type: "uint256",
+            },
+          ],
+          name: "deposit",
+          outputs: [],
+          stateMutability: "payable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "_presaleId",
+              type: "uint256",
+            },
+            {
+              internalType: "address",
+              name: "_user",
+              type: "address",
+            },
+          ],
+          name: "getUserDeposit",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "_presaleId",
+              type: "uint256",
+            },
+            {
+              internalType: "address",
+              name: "_user",
+              type: "address",
+            },
+          ],
+          name: "getUserWhitelistStatus",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "tier1Amount",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "tier2Amount",
+              type: "uint256",
             },
           ],
           stateMutability: "view",
@@ -503,11 +844,85 @@ const deployedContracts = {
         },
         {
           inputs: [],
-          name: "premium",
+          name: "presaleCounter",
           outputs: [
             {
-              internalType: "bool",
+              internalType: "uint256",
               name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          name: "presales",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "presaleId",
+              type: "uint256",
+            },
+            {
+              internalType: "address",
+              name: "tokenAddress",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "tokenPrice",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "startTime",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "endTime",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "minDepositAmount",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "maxDepositAmount",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "totalRaiseGoal",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "totalRaised",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "tier1WhitelistEndTime",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "tier2WhitelistEndTime",
+              type: "uint256",
+            },
+            {
+              internalType: "bool",
+              name: "isActive",
               type: "bool",
             },
           ],
@@ -517,19 +932,84 @@ const deployedContracts = {
         {
           inputs: [
             {
-              internalType: "string",
-              name: "_newGreeting",
-              type: "string",
+              internalType: "address",
+              name: "_tokenAddress",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "_recipient",
+              type: "address",
             },
           ],
-          name: "setGreeting",
+          name: "recoverERC20",
           outputs: [],
-          stateMutability: "payable",
+          stateMutability: "nonpayable",
           type: "function",
         },
         {
           inputs: [],
-          name: "totalCounter",
+          name: "renounceOwnership",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "_presaleId",
+              type: "uint256",
+            },
+            {
+              internalType: "bool",
+              name: "_isActive",
+              type: "bool",
+            },
+          ],
+          name: "setPresaleStatus",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          name: "tier1Whitelist",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          name: "tier2Whitelist",
           outputs: [
             {
               internalType: "uint256",
@@ -544,11 +1024,29 @@ const deployedContracts = {
           inputs: [
             {
               internalType: "address",
+              name: "newOwner",
+              type: "address",
+            },
+          ],
+          name: "transferOwnership",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+            {
+              internalType: "address",
               name: "",
               type: "address",
             },
           ],
-          name: "userGreetingCounter",
+          name: "userDeposits",
           outputs: [
             {
               internalType: "uint256",
@@ -560,18 +1058,42 @@ const deployedContracts = {
           type: "function",
         },
         {
-          inputs: [],
-          name: "withdraw",
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "_presaleId",
+              type: "uint256",
+            },
+            {
+              internalType: "address payable",
+              name: "_recipient",
+              type: "address",
+            },
+          ],
+          name: "withdrawFunds",
           outputs: [],
           stateMutability: "nonpayable",
           type: "function",
         },
         {
-          stateMutability: "payable",
-          type: "receive",
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "_presaleId",
+              type: "uint256",
+            },
+          ],
+          name: "withdrawTokens",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
         },
       ],
-      inheritedFunctions: {},
+      inheritedFunctions: {
+        owner: "@openzeppelin/contracts/access/Ownable.sol",
+        renounceOwnership: "@openzeppelin/contracts/access/Ownable.sol",
+        transferOwnership: "@openzeppelin/contracts/access/Ownable.sol",
+      },
     },
   },
   11155111: {
