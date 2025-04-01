@@ -36,16 +36,16 @@ const deployTokenPresale: DeployFunction = async function (hre: HardhatRuntimeEn
 
   // Example presale parameters
   const tokenSymbol = "HTEST"; // Token symbol
-  const tokenPrice = hre.ethers.parseEther("0.0001"); // 0.0001 ETH per token
+  const tokenPrice = hre.ethers.parseEther("0.000001"); // 0.000001 ETH per token
   const valuation = hre.ethers.parseEther("10000000"); // $10M valuation (scaled by 1e18)
   const totalAllocation = hre.ethers.parseEther("1000000"); // 1 million tokens (scaled by 1e18)
   const startTime = currentTimestamp + 300; // Starts in 5 minutes
-  const endTime = startTime + 86400; // Ends in 24 hours
-  const minDepositAmount = hre.ethers.parseEther("0.01"); // 0.01 ETH
+  const endTime = startTime + 864000; // Ends in 10 days
+  const minDepositAmount = hre.ethers.parseEther("0.001"); // 0.01 ETH
   const maxDepositAmount = hre.ethers.parseEther("1"); // 1 ETH
   const totalRaiseGoal = hre.ethers.parseEther("10"); // 10 ETH
-  const tier1WhitelistEndTime = startTime + 3600; // Tier 1 ends in 1 hour after start
-  const tier2WhitelistEndTime = startTime + 7200; // Tier 2 ends in 2 hours after start
+  const tier1WhitelistEndTime = startTime + 10 * 60; // Tier 1 ends in 10 minutes after start
+  const tier2WhitelistEndTime = startTime + 20 * 60; // Tier 2 ends in 20 minutes after start
 
   try {
     // Create a presale

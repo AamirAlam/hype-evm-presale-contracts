@@ -15774,7 +15774,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "se-2@workspace:."
   dependencies:
-    "@openzeppelin/contracts": ^5.2.0
     husky: ~9.1.6
     lint-staged: ~13.2.2
   languageName: unknown
